@@ -1,29 +1,65 @@
 import java.math.BigInteger;
+import java.util.ArrayList;
 
 public class DiffieHeman {
 
 
 
 	public static void main(String[] args) {
-		BigInteger num = new BigInteger("14");
-		BigInteger base = new BigInteger("2");
-		BigInteger  prueba = calculaBase(num,base);
-		System.out.print(prueba);
+		
+		//String  prueba = calculaBase("14","2");
+		//System.out.print(prueba);
+		BigInteger a = potenciacionModular("3","14","11");
+		System.out.println(a);
+		BigInteger Ejercicio1 = potenciacionModular("2424242424","4444444444","201920192019");
+		System.out.println(Ejercicio1);
 	}
 	
 	
 	//Calcula el modulo de una potencia
-	public static int potenciacionModular(int base, int exp, int bas) {
+	public static BigInteger potenciacionModular(String base, String exp, String mod) {
 		
-		return 0;
+		ArrayList<BigInteger> a = new ArrayList<BigInteger>();
+		ArrayList<BigInteger> b = new ArrayList<BigInteger>();
+		ArrayList<BigInteger> m = new ArrayList<BigInteger>();
+		
+		
+		//RELLENAR B//
+		String binario = calculaBase(exp,"2");
+		binario = reverse(binario);
+		for(int i=0; i<binario.length(); i++) {
+			b.add(new BigInteger(String.valueOf (binario.charAt(i))));
+		}
+		//RELLENAR A//
+		a.add(new BigInteger(base));
+		
+		for(int j=1; j<binario.length();j++) {
+			//bInt.add(j,new BigInteger(base).multiply(bInt.get(j-1)));
+			a.add(j,(new BigInteger(base).multiply(a.get(j-1))).mod(new BigInteger(mod)));
+		}
+		
+		
+		//RELLENAR M//
+		m.add(new BigInteger("1"));
+		for(int i=1; i<=a.size(); i++) {
+			if(b.get(i-1).equals(BigInteger.ZERO)) { // si la anterior pos de b es CERO
+				m.add(m.get(i-1));
+			}else {
+				m.add((m.get(i-1).multiply(a.get(i-1))).mod(new BigInteger(mod)));
+			}
+		}
+		return m.get(m.size()-1);
 	}
+
 	
-	//Calcula un numero segun la base-------------Usar BigInteger
-	public static BigInteger  calculaBase(BigInteger numero, BigInteger base) {
+	//Calcula un numero segun la base
+	public static String  calculaBase(String _numero, String _base) {
 		String resto;
+		BigInteger numero = new BigInteger(_numero);
+		BigInteger base = new BigInteger(_base);
+		
 		BigInteger cociente;
 		BigInteger uno = new BigInteger("1");
-		BigInteger result;
 		
 		cociente = numero.divide(base);
 		resto = (numero.mod(base)).toString();
@@ -35,8 +71,8 @@ public class DiffieHeman {
 		}
 		resto = resto + "1";
 		resto = reverse(resto);
-		result = new BigInteger(resto);
-		return result;
+		
+		return resto;
 	}
 	//Da la vuelta al string que recibe, Original=0111 Result=1110
 	public static String reverse(String cadena) {
