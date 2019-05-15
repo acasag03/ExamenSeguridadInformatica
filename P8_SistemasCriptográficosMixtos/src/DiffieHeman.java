@@ -105,7 +105,7 @@ public class DiffieHeman {
 	
 	}
 	
-	public static void textoNumero(int[] args, BigInteger base)
+	public static BigInteger textoNumero(int[] args, BigInteger base)
 	{
 		BigInteger suma = new BigInteger("0");
 		
@@ -116,6 +116,8 @@ public class DiffieHeman {
 			//n = n.multiply(potenciacionModular(base , args.length - i));
 			suma = suma.add(n);
 		}
+		
+		return suma;
 	}
 	
 	public static String[] alfabetoEnteros(String arg)
@@ -145,6 +147,15 @@ public class DiffieHeman {
 		//Para sacer el numero Alicia, g elevado a a modulo de p
 		//Para sacer el numeor Benito, g elevado a b modulo de p
 		
+		int a[] = new int[A.length()];
+		
+		for(int k = 0; k < A.length();k++)
+		{
+			a[k] = A.charAt(k);
+		}
+		
+		BigInteger p_int = new BigInteger(p);
+		BigInteger nm = textoNumero(a,p_int);
 		String n = numeroTexto(A, p);
 		BigInteger resultado = potenciacionModular(p,b,n);
 		System.out.println(resultado);
